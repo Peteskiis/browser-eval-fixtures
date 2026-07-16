@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact the studio</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.6}
+label{display:block;margin:.8rem 0}
+input,textarea{font-size:1rem;padding:.3rem;width:100%;max-width:24rem;box-sizing:border-box}
+button{font-size:1rem;padding:.5rem 1rem;cursor:pointer}
+.error{color:#a00}
+</style>
+</head>
+<body>
+<h1>Contact the studio</h1>
+<p>Send the fictional studio a note. All three fields are required.</p>
+<form id="contact">
+  <label>Name
+    <input id="name" name="name" type="text" autocomplete="off">
+  </label>
+  <label>Email
+    <input id="email" name="email" type="email" autocomplete="off">
+  </label>
+  <label>Message
+    <textarea id="message" name="message" rows="4"></textarea>
+  </label>
+  <button id="send" type="submit">Send message</button>
+</form>
+<div id="status"></div>
+<script>
+// Mirrors the real-world contact-form shape that exposed the step-ceiling
+// failure: three required fields, per-field validation errors on submit, and
+// a confirmation that is runtime-assembled so it can only be observed by a
+// real successful submission.
+document.getElementById('contact').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('name').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var message = document.getElementById('message').value.trim();
+  var status = document.getElementById('status');
+  if (!name) { status.innerHTML = '<p class="error">Please enter your name.</p>'; return; }
+  if (!email || email.indexOf('@') < 0) {
+    status.innerHTML = '<p class="error">Please enter a valid email.</p>'; return;
+  }
+  if (!message) { status.innerHTML = '<p class="error">Please enter a message.</p>'; return; }
+  document.body.innerHTML =
+    '<h1>Message sent</h1><p>Confirmation code: ' +
+    'CONTACT-SENT-' + (6000 + 274) + '</p><p>Thanks, ' + name + '.</p>';
+});
+</script>
+</body>
+</html>
