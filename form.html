@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback form</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.6}
+label{display:block;margin:.8rem 0}
+input,select,textarea{font-size:1rem;padding:.3rem;width:100%;max-width:24rem;box-sizing:border-box}
+button{font-size:1rem;padding:.5rem 1rem;cursor:pointer}
+#char-count{margin:.4rem 0;font-family:monospace}
+</style>
+</head>
+<body>
+<h1>Feedback form</h1>
+<form id="feedback">
+  <label>Name
+    <input id="name" name="name" type="text" autocomplete="off">
+  </label>
+  <label>Flavor
+    <select id="flavor" name="flavor">
+      <option value="vanilla">Vanilla</option>
+      <option value="blueberry">Blueberry</option>
+      <option value="pistachio">Pistachio</option>
+    </select>
+  </label>
+  <label>Comments
+    <textarea id="comments" name="comments" rows="3" maxlength="80"></textarea>
+  </label>
+  <div id="char-count">COUNT-EVAL-0/80</div>
+  <button id="send-btn" type="submit">Send feedback</button>
+</form>
+<script>
+var comments = document.getElementById('comments');
+var counter = document.getElementById('char-count');
+function updateCount() {
+  counter.textContent = 'COUNT-EVAL-' + comments.value.length + '/80';
+}
+comments.addEventListener('input', updateCount);
+comments.addEventListener('change', updateCount);
+document.getElementById('feedback').addEventListener('submit', function (e) {
+  e.preventDefault();
+  // Post-submit sentinel is assembled at runtime so it can only be observed
+  // by actually submitting the form, never by reading the page source.
+  document.body.innerHTML =
+    '<h1>' + ['FORM-SUBMITTED', 'OK-' + (8000 + 814)].join('-') + '</h1>' +
+    '<p>Thanks for the feedback.</p>';
+});
+</script>
+</body>
+</html>

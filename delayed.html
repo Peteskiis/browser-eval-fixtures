@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access portal</title>
+<style>body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.5}</style>
+</head>
+<body>
+<h1>Access portal</h1>
+<main id="content"><p>Loading your access code…</p></main>
+<script>
+// The code appears only after a delay and is assembled at runtime so it can
+// only be observed on the rendered page, never in the page source.
+setTimeout(function () {
+  document.getElementById('content').innerHTML =
+    '<p>Access code: ' + 'DELTA-' + (9000 + 932) + '</p>';
+}, 3000);
+</script>
+</body>
+</html>

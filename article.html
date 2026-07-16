@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ops bulletin — week 29</title>
+<style>body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.6}</style>
+</head>
+<body>
+<h1>Ops bulletin — week 29</h1>
+<p>The platform team completed the quarterly failover drill on Tuesday. Both
+regional replicas promoted cleanly and read traffic was rebalanced within four
+minutes, well inside the ten-minute objective.</p>
+<p>Object storage lifecycle rules were tightened: build artifacts older than
+ninety days now move to cold storage automatically. Teams that need longer
+retention for compliance snapshots should tag those buckets before Friday.</p>
+<p>A planned maintenance window is scheduled for Saturday between 02:00 and
+04:00 UTC. During this window the internal registry will be read-only. Use
+maintenance window code QRV-4417 when filing any related incident notes so the
+follow-up review can correlate them.</p>
+<p>The metrics pipeline backfill announced last week finished ahead of
+schedule. Dashboards that showed gaps for the first week of the month are now
+complete, and no re-ingestion is required on the team side.</p>
+<p>Finally, a reminder that the on-call handbook moved to the new internal
+wiki. The old bookmarks redirect for one more month.</p>
+</body>
+</html>

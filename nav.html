@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Osprey product hub</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.5}
+button{font-size:1rem;padding:.5rem 1rem;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>Osprey product hub</h1>
+<p>The Osprey line is our fictional mid-range telemetry relay. Detailed
+specifications, including the part number, live on the spec sheet.</p>
+<p><button id="spec-sheet" type="button">Spec sheet</button></p>
+<p><a href="index.html">Back to fixture index</a></p>
+<script>
+// Navigation target is assembled at runtime on purpose: the eval requires a
+// real click, so the destination URL must not appear in markup or source text.
+document.getElementById('spec-sheet').addEventListener('click', function () {
+  window.location.href = ['sp', 'ec', '.ht', 'ml'].join('');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Widget dashboard</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.5}
+#widget{border:1px dashed #999;padding:1rem;color:#666}
+</style>
+</head>
+<body>
+<h1>Widget dashboard</h1>
+<p>The status widget below fails to initialise on load. The page looks mostly
+fine, but diagnostics tell the real story.</p>
+<div id="widget">widget offline</div>
+<script>
+// Error code is assembled at runtime so it can only be observed via the
+// console, never by reading the page source.
+console.error('ERR-CODE-EE-' + (5000 + 150) + ': widget init failed');
+fetch('missing-blob-e51.json').then(function (r) {
+  if (!r.ok) { console.warn('widget data fetch returned status ' + r.status); }
+}).catch(function () { console.warn('widget data fetch failed'); });
+</script>
+</body>
+</html>
