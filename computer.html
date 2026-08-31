@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cluster computer calibration</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; font: 24px/1.4 sans-serif; background: #f7f4ed; color: #171717; }
+    header { position: sticky; top: 0; z-index: 2; padding: 12px 20px; background: #171717; color: white; }
+    #status { font-weight: 700; }
+    #stage { position: relative; min-height: calc(100vh - 58px); overflow: hidden; }
+    .target { position: absolute; width: 112px; height: 76px; border: 4px solid #171717; border-radius: 14px; font: 700 20px sans-serif; box-shadow: 0 5px 0 #171717; cursor: pointer; }
+    .top-left { top: 28px; left: 28px; background: #ff6b6b; }
+    .top-right { top: 28px; right: 28px; background: #ffd43b; }
+    .center { top: 50%; left: 50%; width: 64px; height: 64px; transform: translate(-50%, -50%); background: #69db7c; }
+    .bottom-left { bottom: 28px; left: 28px; background: #74c0fc; }
+    .bottom-right { right: 28px; bottom: 28px; background: #b197fc; }
+    .scroll-stage { min-height: 220vh; overflow: visible; }
+    .below-fold { top: 175vh; left: 50%; transform: translateX(-50%); background: #ffa94d; }
+    .form { width: min(680px, calc(100% - 48px)); margin: 54px auto; padding: 28px; border: 4px solid #171717; border-radius: 18px; background: white; }
+    label { display: block; margin: 18px 0; font-weight: 700; }
+    input { display: block; width: 100%; margin-top: 7px; padding: 12px; font: inherit; border: 3px solid #171717; }
+    .form button { padding: 13px 24px; font: 700 20px sans-serif; }
+    .drag-source, .drag-destination { position: absolute; top: 45%; width: 104px; height: 104px; border: 4px solid #171717; border-radius: 16px; display: grid; place-items: center; font-weight: 700; }
+    .drag-source { left: 12%; background: #ff922b; cursor: grab; touch-action: none; }
+    .drag-destination { right: 12%; background: #e9ecef; border-style: dashed; }
+  </style>
+</head>
+<body>
+  <header>Computer calibration — <span id="status">ready</span></header>
+  <main id="stage"></main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const mode = params.get("mode") || "target";
+    const stage = document.querySelector("#stage");
+    const status = document.querySelector("#status");
+    const codes = {
+      "top-left": ["CB", "TL", "7319"].join("-"),
+      "top-right": ["CB", "TR", "2846"].join("-"),
+      center: ["CB", "CENTER", "9052"].join("-"),
+      "bottom-left": ["CB", "BL", "4173"].join("-"),
+      "bottom-right": ["CB", "BR", "6684"].join("-"),
+      scroll: ["CB", "SCROLL", "3528"].join("-"),
+      form: ["CB", "FORM", "1947"].join("-"),
+      drag: ["CB", "DRAG", "8261"].join("-")
+    };
+
+    function succeed(code) {
+      status.textContent = code;
+      stage.innerHTML = `<div style="display:grid;place-items:center;height:70vh;font-size:52px;font-weight:800">${code}</div>`;
+      document.title = code;
+    }
+
+    if (mode === "target") {
+      const position = params.get("position") || "center";
+      const labels = {"top-left":"Aster", "top-right":"Beacon", center:"Cedar", "bottom-left":"Delta", "bottom-right":"Nimbus"};
+      stage.innerHTML = `<button class="target ${position}" type="button">${labels[position] || "Cedar"}</button>`;
+      stage.querySelector("button").addEventListener("click", () => succeed(codes[position]));
+    } else if (mode === "scroll") {
+      stage.classList.add("scroll-stage");
+      stage.innerHTML = `<p style="padding:28px">The orange button is below the fold.</p><button class="target below-fold" type="button">Comet</button>`;
+      stage.querySelector("button").addEventListener("click", () => succeed(codes.scroll));
+    } else if (mode === "form") {
+      stage.innerHTML = `<form class="form"><h1>Calibration form</h1><label>Call sign<input id="call-sign" autocomplete="off"></label><label>Sequence<input id="sequence" autocomplete="off"></label><button type="submit">Finish</button></form>`;
+      stage.querySelector("form").addEventListener("submit", event => {
+        event.preventDefault();
+        const valid = document.querySelector("#call-sign").value === "Orchid" && document.querySelector("#sequence").value === "4821";
+        status.textContent = valid ? codes.form : "FORM-MISMATCH";
+        if (valid) succeed(codes.form);
+      });
+    } else if (mode === "drag") {
+      stage.innerHTML = `<div class="drag-source">DRAG</div><div class="drag-destination">DROP</div>`;
+      const source = stage.querySelector(".drag-source");
+      const destination = stage.querySelector(".drag-destination");
+      let dragging = false;
+      source.addEventListener("pointerdown", event => { dragging = true; source.setPointerCapture(event.pointerId); });
+      source.addEventListener("pointermove", event => {
+        if (!dragging) return;
+        source.style.left = `${event.clientX - source.offsetWidth / 2}px`;
+        source.style.top = `${event.clientY - source.offsetHeight / 2}px`;
+      });
+      source.addEventListener("pointerup", event => {
+        dragging = false;
+        const box = destination.getBoundingClientRect();
+        if (event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom) succeed(codes.drag);
+        else status.textContent = "DRAG-MISSED";
+      });
+    }
+  </script>
+</body>
+</html>
