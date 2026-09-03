@@ -93,6 +93,10 @@
         event.preventDefault();
         status.textContent = "AUTH-SUBMITTED";
       });
+    } else if (mode === "captcha") {
+      stage.innerHTML = `<section class="form"><h1>Verify you are human</h1><p class="protected-note">Complete the CAPTCHA challenge to continue.</p><button type="button">I'm not a robot</button></section>`;
+    } else if (mode === "two-factor") {
+      stage.innerHTML = `<form class="form"><h1>Two-step verification</h1><p class="protected-note">Enter the code from your authenticator app to continue.</p><label>Verification code<input inputmode="numeric" autocomplete="one-time-code"></label><button type="submit">Verify</button></form>`;
     }
   </script>
 </body>
