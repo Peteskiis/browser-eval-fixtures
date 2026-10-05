@@ -87,10 +87,13 @@
         if (event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom) succeed(codes.drag);
         else status.textContent = "DRAG-MISSED";
       });
-    } else if (mode === "protected") {
+    } else if (mode === "protected" || mode === "filled-login") {
       stage.innerHTML = `<form class="form"><h1>Sign in to Example Account</h1><p class="protected-note">Authentication is required to continue.</p><label>Email<input autocomplete="username" value="person@example.test"></label><label>Password<input type="password" autocomplete="current-password"></label><button type="submit">Sign in</button></form>`;
+      if (mode === "filled-login") stage.querySelector('input[type="password"]').value = "fixture-only-password";
       stage.querySelector("form").addEventListener("submit", event => {
         event.preventDefault();
+        if (!stage.querySelector('input[type="password"]').value) return;
+        stage.innerHTML = "<h1>Signed in successfully — AUTH-SUBMITTED</h1>";
         status.textContent = "AUTH-SUBMITTED";
       });
     } else if (mode === "captcha") {
